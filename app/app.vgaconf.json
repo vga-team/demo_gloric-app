@@ -1,0 +1,154 @@
+{
+  "fileBasePath": "",
+  "pageTitle": "GloRiC Vis",
+  "favicon": "https://assets-global.website-files.com/602eb43d42a3b5553a4f134c/6244bf4e6fe355c3bde76dbe_Favicon-32.png",
+  "preferCanvas": false,
+  "view": {
+    "center": [51, -116],
+    "zoom": 5
+  },
+  "imports": {
+    "gwf-default.metadata": "https://vga-team.github.io/gwf-vis_default-plugins/metadata.plugin.js",
+    "gwf-default.tile-layer": "https://vga-team.github.io/gwf-vis_default-plugins/tile-layer.plugin.js",
+    "gwf-extended.gl-layer": "http://localhost:8000/gl-layer.plugin.js",
+    "gwf-extended.vg-layer": "http://localhost:8000/vg-layer.plugin.js"
+  },
+  "plugins": [
+    {
+      "import": "gwf-default.metadata",
+      "container": "sidebar"
+    },
+    {
+      "import": "gwf-default.tile-layer",
+      "container": "",
+      "props": {
+        "displayName": "World_Imagery",
+        "active": true,
+        "urlTemplate": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        "maxzoom": 5,
+        "options": {
+          "attribution": "Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community"
+        }
+      }
+    },
+    {
+      "import": "gwf-default.tile-layer",
+      "container": "",
+      "props": {
+        "displayName": "Raster",
+        "type": "overlay",
+        "active": false,
+        "urlTemplate": "http://localhost:7777/services/gloric/gloric_ca/tiles/{z}/{x}/{y}.png",
+        "maxzoom": 5
+      }
+    },
+    {
+      "import": "gwf-extended.vg-layer",
+      "container": "",
+      "props": {
+        "displayName": "Canvas",
+        "type": "overlay",
+        "urlTemplate": "http://localhost:7777/services/gloric/gloric_ca/tiles/{z}/{x}/{y}.pbf",
+        "vectorLayerName": "gloric",
+        "strokeColor": {
+          "variable": "Temp_av",
+          "thresholds": [
+            13.7, 33.9, 38.6, 41.6, 44.1, 45.7, 47.0, 48.8, 50.4, 52.0, 56.8
+          ],
+          "colors": [
+            "hsl(0, 100%, 100%)",
+            "hsl(0, 100%, 95%)",
+            "hsl(0, 100%, 90%)",
+            "hsl(0, 100%, 85%)",
+            "hsl(0, 100%, 80%)",
+            "hsl(0, 100%, 75%)",
+            "hsl(0, 100%, 70%)",
+            "hsl(0, 100%, 65%)",
+            "hsl(0, 100%, 60%)",
+            "hsl(0, 100%, 55%)",
+            "hsl(0, 100%, 50%)"
+          ]
+        },
+        "strokeWeight": {
+          "variable": "Log_spow",
+          "thresholds": [1, 2, 3, 4, 5, 6],
+          "weights": [1, 2, 3, 4, 5, 6]
+        }
+      }
+    },
+    {
+      "import": "gwf-extended.gl-layer",
+      "container": "",
+      "props": {
+        "displayName": "WebGL",
+        "active": false,
+        "type": "overlay",
+        "style": {
+          "version": 8,
+          "sources": {
+            "overlay": {
+              "type": "vector",
+              "tiles": [
+                "http://localhost:7777/services/gloric/gloric_ca/tiles/{z}/{x}/{y}.pbf"
+              ],
+              "minzoom": 0,
+              "maxzoom": 5
+            }
+          },
+          "layers": [
+            {
+              "id": "overlay",
+              "source": "overlay",
+              "source-layer": "gloric",
+              "type": "line",
+              "paint": {
+                "line-color": [
+                  "case",
+                  ["==", ["get", "Temp_av"], null],
+                  "hsl(0, 100%, 30%)",
+                  ["<=", ["get", "Temp_av"], 33.9],
+                  "hsl(0, 100%, 100%)",
+                  ["<=", ["get", "Temp_av"], 38.6],
+                  "hsl(0, 100%, 95%)",
+                  ["<=", ["get", "Temp_av"], 41.6],
+                  "hsl(0, 100%, 90%)",
+                  ["<=", ["get", "Temp_av"], 44.1],
+                  "hsl(0, 100%, 85%)",
+                  ["<=", ["get", "Temp_av"], 45.7],
+                  "hsl(0, 100%, 80%)",
+                  ["<=", ["get", "Temp_av"], 47.0],
+                  "hsl(0, 100%, 75%)",
+                  ["<=", ["get", "Temp_av"], 48.8],
+                  "hsl(0, 100%, 70%)",
+                  ["<=", ["get", "Temp_av"], 50.4],
+                  "hsl(0, 100%, 65%)",
+                  ["<=", ["get", "Temp_av"], 52.0],
+                  "hsl(0, 100%, 60%)",
+                  ["<=", ["get", "Temp_av"], 56.8],
+                  "hsl(0, 100%, 55%)",
+                  "hsl(0, 100%, 50%)"
+                ],
+                "line-opacity": 0.75,
+                "line-width": [
+                  "case",
+                  ["==", ["get", "Log_spow"], null],
+                  2,
+                  ["<=", ["get", "Log_spow"], 2],
+                  2,
+                  ["<=", ["get", "Log_spow"], 3],
+                  3,
+                  ["<=", ["get", "Log_spow"], 4],
+                  4,
+                  ["<=", ["get", "Log_spow"], 5],
+                  5,
+                  6
+                ]
+              }
+            }
+          ]
+        },
+        "eventLayerId": "overlay"
+      }
+    }
+  ]
+}
