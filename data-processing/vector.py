@@ -4,29 +4,19 @@ import shapefile
 import subprocess
 from tqdm import tqdm
 import json
+import helpers
 
 # %% configs
 # TODO modify the configs if needed
 input_shape_file_path = "./raw/GloRiC_Canada_v10_shapefile/GloRiC_Canada_v10.shp"
 intermediate_ld_geojson_path = "./temp/gloric_ca.geojson.ld"
-output_mbtiles_path = "./out/gloric_ca.mbtiles"
+output_mbtiles_path = "./out/gloric_ca_vector.mbtiles"
+output_tiles_dir_path = "../app/tilesets/gloric_ca_vector"
 
 maximum_zoom = None
 extend_zooms_if_still_dropping = True
 maximum_tile_bytes = 5_000_000
 maximum_tile_features = 500_000
-
-
-# %% helpers
-def create_container_directory_if_not_existing(file_path):
-    directory = os.path.dirname(file_path)
-    os.makedirs(directory, exist_ok=True)
-
-
-def remove_file_if_exsiting(file_path):
-    if os.path.exists(file_path):
-        os.remove(file_path)
-
 
 # %% read the shape file
 reader = shapefile.Reader(input_shape_file_path)
@@ -51,8 +41,8 @@ def generate_geojson_features():
 features = generate_geojson_features()
 
 # %% generate the line-delimited GeoJSON file
-create_container_directory_if_not_existing(intermediate_ld_geojson_path)
-remove_file_if_exsiting(intermediate_ld_geojson_path)
+helpers.create_container_directory_if_not_existing(intermediate_ld_geojson_path)
+helpers.remove_file_if_exsiting(intermediate_ld_geojson_path)
 with open(intermediate_ld_geojson_path, "a") as file:
     for feature in tqdm(features, total=len(reader)):
         file.write(json.dumps(feature) + "\n")
@@ -63,6 +53,7 @@ options = [
     "-P",
     "-l",
     "gloric",
+    "--no-tile-compression",
 ]
 options.append("-zg" if maximum_zoom is None else f"-z{maximum_zoom}")
 if extend_zooms_if_still_dropping is not None:
@@ -78,10 +69,23 @@ options.append(
     else f"--maximum-tile-features={maximum_tile_bytes}"
 )
 
-create_container_directory_if_not_existing(output_mbtiles_path)
-remove_file_if_exsiting(output_mbtiles_path)
+helpers.create_container_directory_if_not_existing(output_mbtiles_path)
+helpers.remove_file_if_exsiting(output_mbtiles_path)
 subprocess.run(
     ["tippecanoe", "-o", output_mbtiles_path, *options, intermediate_ld_geojson_path]
+)
+
+# %% extract mbtiles into a directory
+helpers.create_container_directory_if_not_existing(output_tiles_dir_path)
+helpers.remove_dir_if_exsiting(output_tiles_dir_path)
+subprocess.run(
+    [
+        "mb-util",
+        "--scheme=xyz",
+        "--image_format=pbf",
+        output_mbtiles_path,
+        output_tiles_dir_path,
+    ]
 )
 
 # %%

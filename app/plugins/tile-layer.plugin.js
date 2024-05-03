@@ -1,6 +1,6 @@
-import { maplibreLayer } from "./maplibre-layer.helper.js";
+import * as d3 from "https://esm.run/d3";
 
-export default class PluginGLLayer extends HTMLElement {
+export default class PluginVectorGridLayer extends HTMLElement {
   //#region VGA host APIs
   sharedStates;
   updateSharedStatesDelegate;
@@ -9,7 +9,7 @@ export default class PluginGLLayer extends HTMLElement {
   addMapLayerDelegate;
   leaflet;
 
-  obtainHeaderCallback = () => `GL Layer - ${this.displayName}`;
+  obtainHeaderCallback = () => `Tile Layer - ${this.displayName}`;
 
   hostFirstLoadedCallback() {
     const loadingEndDelegate = this.notifyLoadingDelegate?.();
@@ -19,8 +19,11 @@ export default class PluginGLLayer extends HTMLElement {
   //#endregion
 
   //#region plugin properties
-  style;
-  eventLayerId;
+  displayName = "Tile Layer";
+  type = "base-layer";
+  active = false;
+  urlTemplate;
+  options;
   //#endregion
 
   #layerInstance;
@@ -39,21 +42,12 @@ export default class PluginGLLayer extends HTMLElement {
 
   #initializeMapLayer() {
     this.#layerInstance && this.removeMapLayerDelegate?.(this.#layerInstance);
-    this.#layerInstance = maplibreLayer({
-      style: this.style,
-      interactive: true,
-    });
-    this.#layerInstance.on("add", () => {
-      this.#layerInstance
-        .getMaplibreMap()
-        .on("click", this.eventLayerId ?? "", (e) => {
-          this.updateSharedStatesDelegate?.({
-            ...this.sharedStates,
-            // compatible with gwf-default.metadata plugin and use it to show the metadata
-            "gwf-default.metadata": e.features?.[0].properties,
-          });
-        });
-    });
+
+    this.#layerInstance = this.leaflet?.tileLayer(
+      this.urlTemplate,
+      this.options
+    );
+
     this.#layerInstance &&
       this.addMapLayerDelegate?.(
         this.#layerInstance,

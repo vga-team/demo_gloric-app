@@ -1,7 +1,7 @@
 # Data Processing
 
 This directory contains scripts to process the (GloRiC) [https://www.hydrosheds.org/products/gloric] dataset into MBTiles files. Assume the raw dataset is in `raw` directory and carefully check all the configs in the configs cell of each script file. The default setting is to use the Canada shapefile format.  
-Each script requires some software packages to be installed. For Python packages, a `requirement.txt` is provided for convenience. For other software packages, please check the following sections.
+Each script requires some software packages to be installed. For Python packages, a `requirement.txt` is provided for convenience. Then we need `mbutil` installed. For other software packages, please check the following sections.
 
 ## Vector Tiles
 

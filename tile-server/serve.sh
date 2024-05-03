@@ -1,1 +1,0 @@
-./mbtileserver -p 7777 -d ../data-processing/out -v --basemap-tiles-url https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
