@@ -49,8 +49,7 @@ export default class PluginGLLayer extends HTMLElement {
         .on("click", this.eventLayerId ?? "", (e) => {
           this.updateSharedStatesDelegate?.({
             ...this.sharedStates,
-            // compatible with gwf-default.metadata plugin and use it to show the metadata
-            "gwf-default.metadata": e.features?.[0].properties,
+            metadata: e.features?.[0].properties,
           });
         });
     });

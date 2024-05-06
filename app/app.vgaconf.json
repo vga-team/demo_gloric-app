@@ -8,14 +8,14 @@
     "zoom": 5
   },
   "imports": {
-    "gwf-default.metadata": "https://vga-team.github.io/gwf-vis_default-plugins/metadata.plugin.js",
+    "metadata": "http://localhost:8000/plugins/metadata.plugin.js",
     "tile-layer": "http://localhost:8000/plugins/tile-layer.plugin.js",
     "gl-layer": "http://localhost:8000/plugins/gl-layer.plugin.js",
     "vg-layer": "http://localhost:8000/plugins/vg-layer.plugin.js"
   },
   "plugins": [
     {
-      "import": "gwf-default.metadata",
+      "import": "metadata",
       "container": "sidebar"
     },
     {

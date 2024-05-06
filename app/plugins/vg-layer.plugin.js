@@ -81,7 +81,7 @@ export default class PluginVectorGridLayer extends HTMLElement {
     this.#layerInstance?.on("click", ({ layer: { properties } }) =>
       this.updateSharedStatesDelegate?.({
         ...this.sharedStates,
-        "gwf-default.metadata": properties,
+        metadata: properties,
       })
     );
 
