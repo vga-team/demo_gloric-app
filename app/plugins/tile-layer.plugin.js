@@ -1,6 +1,4 @@
-import * as d3 from "https://esm.run/d3";
-
-export default class PluginVectorGridLayer extends HTMLElement {
+export default class PluginTileLayer extends HTMLElement {
   //#region VGA host APIs
   sharedStates;
   updateSharedStatesDelegate;
