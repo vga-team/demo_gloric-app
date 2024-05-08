@@ -9,6 +9,7 @@ export default class PluginVectorGridLayer extends HTMLElement {
   notifyLoadingDelegate;
   addMapLayerDelegate;
   leaflet;
+  configBaseUrl;
 
   obtainHeaderCallback = () => `GL Layer - ${this.displayName}`;
 
@@ -58,25 +59,32 @@ export default class PluginVectorGridLayer extends HTMLElement {
           .domain(this.strokeWeight.thresholds)
       : () => 1;
 
-    this.#layerInstance = L.vectorGrid.protobuf(this.urlTemplate ?? "", {
-      rendererFactory: L.canvas.tile,
-      interactive: true,
-      maxNativeZoom: this.maxNativeZoom,
-      maxZoom: this.maxZoom,
-      vectorTileLayerStyles: {
-        [this.vectorLayerName]: (metadata) => {
-          return {
-            weight: scaleStrokeWeight(
-              metadata[this.strokeWeight?.variable ?? ""]
-            ),
-            color: scaleStrokeColor(metadata[this.strokeColor?.variable ?? ""]),
-            fillColor: scaleFillColor(metadata[this.fillColor?.variable ?? ""]),
-            fill: true,
-            capacity: 0.75,
-          };
+    this.#layerInstance = L.vectorGrid.protobuf(
+      this.urlTemplate?.replace(/^.\//, this.configBaseUrl ?? "./") ?? "",
+      {
+        rendererFactory: L.canvas.tile,
+        interactive: true,
+        maxNativeZoom: this.maxNativeZoom,
+        maxZoom: this.maxZoom,
+        vectorTileLayerStyles: {
+          [this.vectorLayerName]: (metadata) => {
+            return {
+              weight: scaleStrokeWeight(
+                metadata[this.strokeWeight?.variable ?? ""]
+              ),
+              color: scaleStrokeColor(
+                metadata[this.strokeColor?.variable ?? ""]
+              ),
+              fillColor: scaleFillColor(
+                metadata[this.fillColor?.variable ?? ""]
+              ),
+              fill: true,
+              capacity: 0.75,
+            };
+          },
         },
-      },
-    });
+      }
+    );
 
     this.#layerInstance?.on("click", ({ layer: { properties } }) =>
       this.updateSharedStatesDelegate?.({

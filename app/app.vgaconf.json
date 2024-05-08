@@ -8,10 +8,10 @@
     "zoom": 5
   },
   "imports": {
-    "metadata": "http://localhost:8000/plugins/metadata.plugin.js",
-    "tile-layer": "http://localhost:8000/plugins/tile-layer.plugin.js",
-    "gl-layer": "http://localhost:8000/plugins/gl-layer.plugin.js",
-    "vg-layer": "http://localhost:8000/plugins/vg-layer.plugin.js"
+    "metadata": "./plugins/metadata.plugin.js",
+    "tile-layer": "./plugins/tile-layer.plugin.js",
+    "gl-layer": "./plugins/gl-layer.plugin.js",
+    "vg-layer": "./plugins/vg-layer.plugin.js"
   },
   "plugins": [
     {
@@ -37,7 +37,7 @@
         "displayName": "Raster",
         "type": "overlay",
         "active": false,
-        "urlTemplate": "http://localhost:8000/tilesets/gloric_ca_raster/{z}/{x}/{y}.png",
+        "urlTemplate": "./tilesets/gloric_ca_raster/{z}/{x}/{y}.png",
         "options": {
           "minNativeZoom": 1,
           "maxNativeZoom": 8
@@ -50,7 +50,7 @@
       "props": {
         "displayName": "Canvas",
         "type": "overlay",
-        "urlTemplate": "http://localhost:8000/tilesets/gloric_ca_vector/{z}/{x}/{y}.pbf",
+        "urlTemplate": "./tilesets/gloric_ca_vector/{z}/{x}/{y}.pbf",
         "vectorLayerName": "gloric",
         "strokeColor": {
           "variable": "Temp_av",
@@ -90,9 +90,7 @@
           "sources": {
             "overlay": {
               "type": "vector",
-              "tiles": [
-                "http://localhost:8000/tilesets/gloric_ca_vector/{z}/{x}/{y}.pbf"
-              ],
+              "tiles": ["./tilesets/gloric_ca_vector/{z}/{x}/{y}.pbf"],
               "errorTileURL": "data:application/x-protobuf;base64,",
               "minzoom": 1,
               "maxzoom": 6

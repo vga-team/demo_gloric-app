@@ -39,6 +39,16 @@ export default class PluginGLLayer extends HTMLElement {
 
   #initializeMapLayer() {
     this.#layerInstance && this.removeMapLayerDelegate?.(this.#layerInstance);
+    // TODO this currently only work for resolve relative path for
+    for (const key in this.style?.sources ?? {}) {
+      const tiles = this.style.sources[key].tiles;
+      if (!tiles) {
+        continue;
+      }
+      this.style.sources[key].tiles = this.style.sources[key].tiles.map(
+        (tile) => tile?.replace(/^.\//, this.configBaseUrl ?? "./")
+      );
+    }
     this.#layerInstance = maplibreLayer({
       style: this.style,
       interactive: true,

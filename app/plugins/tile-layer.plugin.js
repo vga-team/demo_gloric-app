@@ -42,7 +42,7 @@ export default class PluginTileLayer extends HTMLElement {
     this.#layerInstance && this.removeMapLayerDelegate?.(this.#layerInstance);
 
     this.#layerInstance = this.leaflet?.tileLayer(
-      this.urlTemplate,
+      this.urlTemplate?.replace(/^.\//, this.configBaseUrl ?? "./"),
       this.options
     );
 
