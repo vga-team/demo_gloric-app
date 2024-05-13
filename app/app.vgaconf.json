@@ -51,6 +51,7 @@
         "displayName": "Canvas",
         "type": "overlay",
         "urlTemplate": "./tilesets/gloric_ca_vector/{z}/{x}/{y}.pbf",
+        "maxNativeZoom": 6,
         "vectorLayerName": "gloric",
         "strokeColor": {
           "variable": "Temp_av",
