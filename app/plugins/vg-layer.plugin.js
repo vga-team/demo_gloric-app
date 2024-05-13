@@ -60,7 +60,7 @@ export default class PluginVectorGridLayer extends HTMLElement {
           .domain(this.strokeWeight.thresholds)
       : () => 1;
 
-    this.#layerInstance = (this.leaflet?.vectorGrid ?? L?.vectorGrid).protobuf(
+    this.#layerInstance = L.vectorGrid.protobuf(
       this.urlTemplate?.replace(/^.\//, this.configBaseUrl ?? "./") ?? "",
       {
         rendererFactory: L.canvas.tile,
