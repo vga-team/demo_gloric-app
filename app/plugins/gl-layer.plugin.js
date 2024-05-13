@@ -21,6 +21,7 @@ export default class PluginGLLayer extends HTMLElement {
   //#region plugin properties
   style;
   eventLayerId;
+  metadataStateKey = "metadata";
   //#endregion
 
   #layerInstance;
@@ -59,7 +60,7 @@ export default class PluginGLLayer extends HTMLElement {
         .on("click", this.eventLayerId ?? "", (e) => {
           this.updateSharedStatesDelegate?.({
             ...this.sharedStates,
-            metadata: e.features?.[0].properties,
+            [this.metadataStateKey]: e.features?.[0].properties,
           });
         });
     });

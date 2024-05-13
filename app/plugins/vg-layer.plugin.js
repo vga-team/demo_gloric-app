@@ -21,6 +21,7 @@ export default class PluginVectorGridLayer extends HTMLElement {
   //#endregion
 
   //#region plugin properties
+  metadataStateKey = "metadata";
   //#endregion
 
   #layerInstance;
@@ -89,7 +90,7 @@ export default class PluginVectorGridLayer extends HTMLElement {
     this.#layerInstance?.on("click", ({ layer: { properties } }) =>
       this.updateSharedStatesDelegate?.({
         ...this.sharedStates,
-        metadata: properties,
+        [this.metadataStateKey]: properties,
       })
     );
 
