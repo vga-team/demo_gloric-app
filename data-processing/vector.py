@@ -4,6 +4,8 @@ import shapefile
 import subprocess
 from tqdm import tqdm
 import json
+import numpy as np
+from random import random
 import helpers
 
 # %% configs
@@ -22,6 +24,13 @@ maximum_tile_features = 500_000
 reader = shapefile.Reader(input_shape_file_path)
 
 
+def generate_mock_time_series(base: float, count: int):
+    variance = min(1 - base, base - 0)
+    angles = np.linspace(0, 2 * np.pi, count)
+    items = base + variance * np.sin(angles)
+    return items.tolist()
+
+
 def generate_geojson_features():
     fields = reader.fields
     for shape_record in reader.iterShapeRecords():
@@ -29,6 +38,9 @@ def generate_geojson_features():
         geometry = shape_record.shape.__geo_interface__
         field_names = [field[0] for field in fields]
         metadata = dict(zip(field_names, shape_record.record))
+        mockTimeSeries = generate_mock_time_series(random(), 10)
+        for i in range(len(mockTimeSeries)):
+            metadata[f"mockTimeSeries{i}"] = mockTimeSeries[i]
         feature = {
             "id": id,
             "type": "Feature",

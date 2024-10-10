@@ -10,8 +10,9 @@
   "imports": {
     "metadata": "./plugins/metadata.plugin.js",
     "tile-layer": "./plugins/tile-layer.plugin.js",
-    "gl-layer": "./plugins/gl-layer.plugin.js",
-    "vg-layer": "./plugins/vg-layer.plugin.js"
+    "gl-layer": "./plugins/gl-layer-2.plugin.js",
+    "vg-layer": "./plugins/vg-layer.plugin.js",
+    "line-chart": "./plugins/line-chart.plugin.js"
   },
   "plugins": [
     {
@@ -81,7 +82,7 @@
     },
     {
       "import": "gl-layer",
-      "container": "",
+      "container": "sidebar",
       "props": {
         "displayName": "WebGL",
         "active": false,
@@ -150,6 +151,14 @@
           ]
         },
         "eventLayerId": "overlay"
+      }
+    },
+    {
+      "import": "line-chart",
+      "container": "sidebar",
+      "props": {
+        "dataKey": "mockTimeSeries",
+        "count": 10
       }
     }
   ]

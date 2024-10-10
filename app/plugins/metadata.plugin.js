@@ -12,6 +12,7 @@ export default class PluginMetadata extends HTMLElement {
 
   //#region plugin properties
   metadata;
+  ignoredMetadataPrefix = "mockTimeSeries";
   //#endregion
 
   constructor() {
@@ -26,6 +27,7 @@ export default class PluginMetadata extends HTMLElement {
     this.shadowRoot.innerHTML = this.metadata
       ? /* html */ `<table>
         ${Object.entries(this.metadata)
+          .filter(([key]) => !key.startsWith(this.ignoredMetadataPrefix))
           .map(
             ([key, value]) =>
               /* html */ `<tr><td>${key}</td><td>${value}</td><tr>`
